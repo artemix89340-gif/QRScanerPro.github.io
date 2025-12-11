@@ -1,14 +1,110 @@
-<style>
-   .container {
-            width: 100%;
-            flex: 1;
-            display: flex;
-            overflow: hidden;
-            padding: 0;
-            margin: 0;
-   }
-</style>
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scanner et Importer QR Code</title>
+    
+    <!-- VOTRE BALISE GOOGLE ADSENSE -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9611622736064565"
+     crossorigin="anonymous"></script>
 
-<div class="container">
-   <iframe src="https://temple-ofboom.github.io/" title="Temple of Boom"></iframe>
-</div>
+    <!-- Bibliothèque pour le scanner QR (via CDN) -->
+    <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
+
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-color: #f0f2f5;
+            margin: 0;
+            padding: 20px;
+        }
+        h1 { color: #333; }
+        .container {
+            width: 100%;
+            max-width: 500px;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        #reader {
+            width: 100%;
+            margin-top: 20px;
+        }
+        #result {
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #e8f5e9;
+            border: 1px solid #c8e6c9;
+            border-radius: 4px;
+            word-break: break-all;
+            display: none; /* Masqué par défaut */
+        }
+        .ads-container {
+            margin-top: 30px;
+            width: 100%;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Scanner de QR Code</h1>
+        <p>Utilisez votre caméra ou importez une image.</p>
+        
+        <!-- Zone d'affichage du scanner -->
+        <div id="reader"></div>
+
+        <!-- Zone d'affichage du résultat -->
+        <div id="result">
+            <strong>Résultat du scan :</strong>
+            <span id="decoded-text"></span>
+        </div>
+    </div>
+
+    <!-- Espace pour l'affichage de la publicité -->
+    <div class="ads-container">
+        <!-- Vous pouvez placer une unité d'annonce spécifique ici si nécessaire -->
+    </div>
+
+    <script>
+        // Fonction appelée quand un QR code est détecté avec succès
+        function onScanSuccess(decodedText, decodedResult) {
+            // Afficher le résultat dans la console
+            console.log(`Code scanné = ${decodedText}`, decodedResult);
+            
+            // Afficher le résultat sur la page
+            const resultDiv = document.getElementById('result');
+            const resultText = document.getElementById('decoded-text');
+            
+            resultText.innerText = decodedText;
+            resultDiv.style.display = "block";
+            
+            // Optionnel : Arrêter le scan après une lecture réussie
+            // html5QrcodeScanner.clear();
+        }
+
+        function onScanFailure(error) {
+            // Gère les erreurs de scan (fréquent si aucun QR code n'est devant la caméra)
+            // On laisse vide pour ne pas spammer la console
+            // console.warn(`Erreur de scan = ${error}`);
+        }
+
+        // Configuration du scanner
+        // fps : nombre d'images par seconde
+        // qrbox : taille de la zone de scan
+        let html5QrcodeScanner = new Html5QrcodeScanner(
+            "reader",
+            { fps: 10, qrbox: { width: 250, height: 250 } },
+            /* verbose= */ false);
+
+        html5QrcodeScanner.render(onScanSuccess, onScanFailure);
+    </script>
+
+</body>
+</html>
