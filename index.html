@@ -9,10 +9,28 @@
     <title>QR Scanner Pro</title>
     <link rel="icon" type="image/png" href="https://cdn-icons-png.flaticon.com/512/241/241528.png">
 
-    <!-- 1. SCRIPT ADSENSE (GLOBAL) -->
-    <!-- Ce script connecte votre site à Google AdSense -->
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9611622736064565"
-     crossorigin="anonymous"></script>
+    <!-- Chargement conditionnel d'AdSense (via consentement) -->
+    <script>
+        let adsAllowed = false;
+
+        function loadAdsense() {
+            if (adsAllowed) return;
+            adsAllowed = true;
+            const s = document.createElement('script');
+            s.async = true;
+            s.src = "https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9611622736064565";
+            s.crossOrigin = "anonymous";
+            document.head.appendChild(s);
+        }
+
+        function enableAds() {
+            loadAdsense();
+            window.adsbygoogle = window.adsbygoogle || [];
+            document.querySelectorAll('.adsbygoogle').forEach(function (el) {
+                (adsbygoogle = window.adsbygoogle || []).push({});
+            });
+        }
+    </script>
 
     <!-- Bibliothèque Scanner -->
     <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
@@ -23,7 +41,6 @@
     <style>
         :root {
             --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            /* Dégradé Vert/Turquoise pour les boutons et menus */
             --btn-gradient: linear-gradient(45deg, #00b894, #00cec9); 
             --glass-bg: rgba(255, 255, 255, 0.94);
             --glass-border: 1px solid rgba(255, 255, 255, 0.5);
@@ -51,11 +68,6 @@
             100% { background-position: 0% 50%; }
         }
 
-        /* =========================================
-           STYLES DES BOUTONS & MENUS (Design PRO)
-           ========================================= */
-        
-        /* 1. Gros Boutons (Scanner + Bouton Modal) */
         .big-btn, #reader button {
             background: var(--btn-gradient) !important;
             color: white !important;
@@ -78,29 +90,23 @@
             box-shadow: 0 15px 30px rgba(0, 184, 148, 0.5) !important;
         }
 
-        /* 2. Liste Déroulante (Select) Stylisée */
         #reader select {
-            appearance: none; /* Supprime le style moche par défaut */
+            appearance: none;
             -webkit-appearance: none;
             -moz-appearance: none;
-            
             background: var(--btn-gradient) !important;
             color: white !important;
             font-family: 'Poppins', sans-serif !important;
             font-size: 1rem !important;
             font-weight: 600 !important;
-            
-            padding: 12px 40px 12px 20px !important; /* Espace pour la flèche à droite */
+            padding: 12px 40px 12px 20px !important;
             border-radius: 50px !important;
             border: 2px solid rgba(255,255,255,0.3) !important;
             box-shadow: 0 5px 15px rgba(0, 184, 148, 0.2) !important;
-            
             cursor: pointer;
             margin-bottom: 15px !important;
             text-align: center;
             outline: none;
-
-            /* Flèche blanche personnalisée (SVG) */
             background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23FFFFFF%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E") !important;
             background-repeat: no-repeat !important;
             background-position: right 15px center !important;
@@ -114,9 +120,6 @@
         
         #reader select option { background-color: #333; color: white; }
 
-        /* =========================================
-           HEADER & NAVIGATION
-           ========================================= */
         header {
             background: rgba(255, 255, 255, 0.1);
             backdrop-filter: blur(15px);
@@ -148,9 +151,6 @@
         }
         .lang-btn:hover { background: rgba(255,255,255,0.4); }
 
-        /* =========================================
-           LAYOUT PRINCIPAL (3 Colonnes)
-           ========================================= */
         .main-wrapper {
             display: flex;
             flex: 1;
@@ -178,7 +178,6 @@
             animation: fadeInUp 0.8s ease-out;
         }
 
-        /* Styles Scanner */
         .scanner-card { text-align: center; }
         #reader {
             width: 100%;
@@ -188,7 +187,7 @@
             margin: 20px 0;
             background: #fafafa;
         }
-        #reader a { color: var(--accent-color); font-weight: bold; } /* Liens "Stop Scanning" */
+        #reader a { color: var(--accent-color); font-weight: bold; }
 
         #result {
             padding: 20px;
@@ -202,11 +201,9 @@
             text-align: left;
         }
 
-        /* Styles Textes */
         .info-section h2 { color: var(--accent-color); margin-top: 0; border-bottom: 2px solid #eee; padding-bottom: 10px; }
         .info-section li { margin-bottom: 10px; line-height: 1.6; }
 
-        /* Sidebars Pubs */
         .ad-sidebar { width: 180px; min-width: 180px; }
         .ad-slot {
             position: sticky; top: 100px;
@@ -216,11 +213,9 @@
             display: flex; align-items: center; justify-content: center;
             color: rgba(255,255,255,0.7);
             border: 1px dashed rgba(255,255,255,0.3);
+            position: relative;
         }
 
-        /* =========================================
-           POPUP MODALE (Caméra)
-           ========================================= */
         .modal-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(0,0,0,0.6);
@@ -244,7 +239,18 @@
         @keyframes bounce { 0%, 100% {transform: translateY(0);} 50% {transform: translateY(-10px);} }
         @keyframes fadeInUp { from {transform: translateY(30px);opacity: 0;} to {transform: translateY(0);opacity: 1;} }
 
-        /* Responsive */
+        footer {
+            text-align: center;
+            padding: 20px;
+            color: white;
+            font-size: 0.9rem;
+        }
+
+        footer a {
+            color: white;
+            text-decoration: underline;
+        }
+
         @media (max-width: 950px) {
             .main-wrapper { flex-direction: column; align-items: center; }
             .ad-sidebar { width: 100%; flex-direction: row; justify-content: center; }
@@ -255,6 +261,30 @@
     </style>
 </head>
 <body>
+
+    <!-- BANNIÈRE DE CONSENTEMENT COOKIES / ADSENSE -->
+    <div id="cookie-banner" style="
+        position:fixed; bottom:0; left:0; right:0; z-index:9999;
+        background:#222; color:#fff; padding:15px; font-size:0.9rem;
+        display:flex; flex-wrap:wrap; align-items:center; justify-content:center; gap:10px;">
+        <span>
+            Ce site utilise des cookies et Google AdSense pour afficher des publicités.
+            En continuant, vous acceptez l'utilisation de cookies pour les annonces et la mesure d'audience.
+        </span>
+        <button id="cookie-accept" style="
+            background:#00b894; color:white; border:none; padding:8px 16px;
+            border-radius:20px; cursor:pointer; font-weight:600;">
+            Accepter
+        </button>
+        <button id="cookie-decline" style="
+            background:transparent; color:#fff; border:1px solid #fff; padding:8px 16px;
+            border-radius:20px; cursor:pointer;">
+            Refuser
+        </button>
+        <a href="/politique-confidentialite.html" style="color:#fff; text-decoration:underline;">
+            En savoir plus
+        </a>
+    </div>
 
     <!-- POPUP MODALE -->
     <div id="camera-modal" class="modal-overlay active">
@@ -293,14 +323,12 @@
         <!-- SIDEBAR GAUCHE (PUB) -->
         <aside class="ad-sidebar">
             <div class="ad-slot">
-                <!-- REMPLACER data-ad-slot PAR VOTRE ID ADSENSE -->
                 <ins class="adsbygoogle"
                      style="display:block; width:100%; height:100%"
                      data-ad-client="ca-pub-9611622736064565"
                      data-ad-slot="VOTRE_ID_ICI"
                      data-ad-format="auto"
                      data-full-width-responsive="true"></ins>
-                <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
                 <span style="position:absolute; font-size:10px; opacity:0.5;">Ad Space</span>
             </div>
         </aside>
@@ -346,28 +374,64 @@
         <!-- SIDEBAR DROITE (PUB) -->
         <aside class="ad-sidebar">
             <div class="ad-slot">
-                <!-- REMPLACER data-ad-slot PAR VOTRE ID ADSENSE -->
                 <ins class="adsbygoogle"
                      style="display:block; width:100%; height:100%"
                      data-ad-client="ca-pub-9611622736064565"
                      data-ad-slot="VOTRE_ID_ICI"
                      data-ad-format="auto"
                      data-full-width-responsive="true"></ins>
-                <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
                 <span style="position:absolute; font-size:10px; opacity:0.5;">Ad Space</span>
             </div>
         </aside>
 
     </div>
 
+    <!-- FOOTER LIENS LÉGAUX -->
+    <footer>
+        <a href="/politique-confidentialite.html">Politique de confidentialité</a>
+        &nbsp;|&nbsp;
+        <a href="/mentions-legales.html">Mentions légales</a>
+    </footer>
+
     <!-- JAVASCRIPT -->
     <script>
-        // --- 1. POPUP ---
+        // BANNIÈRE COOKIES / CONSENTEMENT
+        const banner = document.getElementById('cookie-banner');
+        const acceptBtn = document.getElementById('cookie-accept');
+        const declineBtn = document.getElementById('cookie-decline');
+
+        function setConsent(value) {
+            localStorage.setItem('qrscaner_consent', value);
+        }
+
+        function getConsent() {
+            return localStorage.getItem('qrscaner_consent');
+        }
+
+        if (getConsent() === 'accepted') {
+            banner.style.display = 'none';
+            enableAds();
+        } else if (getConsent() === 'declined') {
+            banner.style.display = 'none';
+        }
+
+        acceptBtn.addEventListener('click', function () {
+            setConsent('accepted');
+            banner.style.display = 'none';
+            enableAds();
+        });
+
+        declineBtn.addEventListener('click', function () {
+            setConsent('declined');
+            banner.style.display = 'none';
+        });
+
+        // POPUP CAMÉRA
         function closeModal() {
             document.getElementById('camera-modal').classList.remove('active');
         }
 
-        // --- 2. TRADUCTION ---
+        // TRADUCTION
         let currentLang = 'fr';
         const texts = {
             fr: {
@@ -410,12 +474,10 @@
             currentLang = currentLang === 'fr' ? 'en' : 'fr';
             const t = texts[currentLang];
 
-            // Modal
             document.getElementById('modal-title').innerText = t.modalTitle;
             document.getElementById('modal-desc').innerHTML = t.modalDesc;
             document.getElementById('modal-btn').innerText = t.modalBtn;
             
-            // Interface
             document.getElementById('nav-scan').innerText = t.navScan;
             document.getElementById('nav-how').innerText = t.navHow;
             document.getElementById('nav-support').innerText = t.navSupport;
@@ -432,7 +494,7 @@
             document.getElementById('support-text').innerHTML = t.supportText;
         }
 
-        // --- 3. SCANNER LOGIC ---
+        // SCANNER LOGIC
         function onScanSuccess(decodedText) {
             document.getElementById('decoded-text').innerText = decodedText;
             const resultDiv = document.getElementById('result');
